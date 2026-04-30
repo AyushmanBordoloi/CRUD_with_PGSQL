@@ -16,7 +16,7 @@ conn.connect().then(()=> console.log("Connected to database"))
 
 app.post('/postData', (req, res)=>{
     const {name, id} = req.body;
-    const insert_query = "insert into demo_table (name, id) val ($1, $2)"
+    const insert_query = "insert into demo_table (name, id) values ($1, $2)"
 
     conn.query(insert_query,[name, id], (err, result)=>{
         if(err){
@@ -24,6 +24,31 @@ app.post('/postData', (req, res)=>{
         }else{
             console.log(result)
             res.send("POSTED Data")
+        }
+    })
+})
+
+app.get('/getData', (req, res)=> {
+    const select_query = "select * from demo_table"
+    conn.query(select_query, (err, result)=>{
+        if(err){
+            res.send(err)
+        }else{
+            console.log(result)
+            res.send(result.rows)
+        }
+    })
+})
+
+app.get('/fetchByID/:id', (req, res)=> {
+    const id = req.params.id;
+    const select_query = "select * from demo_table where id = $1"
+    conn.query(select_query, [id], (err, result)=>{
+        if(err){
+            res.send(err)
+        }else{
+            console.log(result)
+            res.send(result.rows)
         }
     })
 })
