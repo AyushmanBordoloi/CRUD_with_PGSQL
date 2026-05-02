@@ -67,6 +67,19 @@ app.put('/update/:id', (req, res)=>{
     })
 })
 
+app.delete('/delete/:id', (req, res)=>{
+    const id = req.params.id;
+    const delete_query = "delete from demo_table where id = $1"
+    conn.query(delete_query, [id], (err, result)=>{
+        if (err){
+            res.send(err)
+        }else{
+            console.log(result)
+            res.send("DELETED")
+        }
+    })
+})
+
 app.listen(3000, ()=>{
     console.log("Server is running on port: 3000")
 })
